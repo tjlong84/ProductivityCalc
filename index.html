@@ -1,0 +1,73 @@
+
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>Productivity Calculator</title>
+  <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css'><link rel="stylesheet" href="./style.css">
+
+</head>
+<body>
+<!-- partial:index.partial.html -->
+<div class="container">
+  <div class="col-sm">
+    <table class="table">
+      <tr>
+        <td>Start Time </td>
+        <td><input type="time" id="startTime" value='07:00'></td>
+      </tr>
+      <tr>
+        <td>Scheduled Therapy Time Hours </td>
+        <td><input id="productiveHours" type="number" min="0" step="1" value="7"></td>
+
+      </tr>
+      <tr>
+        <td>Scheduled Therapy Time Minutes </td>
+        <td><input id="productiveMinutes" type="number" min="0" step="1" value="30"></td>
+      </tr>
+      <tr>
+        <td>
+          Productivity </td>
+        <td><input type="number" value="85" min="0" max="100" step="1" id=productivity>%</td>
+      </tr>
+    </table>
+  </div>
+   
+  <div class="col-sm">
+    <table class="table">
+      <tr>
+        <td><h2>
+          Perfect end time is <span id="outputTime"></span></td>
+        </h2> </tr>
+    </table>
+  </div>
+</div>
+<!-- partial -->
+<!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/8.2.0/firebase-app.js"></script>
+
+<!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+<script src="https://www.gstatic.com/firebasejs/8.2.0/firebase-analytics.js"></script>
+
+<script>
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  var firebaseConfig = {
+    apiKey: "AIzaSyDV1BdYShPmhZpnStqgWUyEmWdrSSrF7m8",
+    authDomain: "productivity-calc.firebaseapp.com",
+    projectId: "productivity-calc",
+    storageBucket: "productivity-calc.appspot.com",
+    messagingSenderId: "69197155310",
+    appId: "1:69197155310:web:9f2e1bae8064a42bf11cff",
+    measurementId: "G-2WQWHT5TWQ"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  firebase.analytics();
+</script>
+
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js'></script><script  src="./script.js"></script>
+
+</body>
+</html>
