@@ -17,11 +17,37 @@ const prodPlus = document.getElementById('prodPlus');
 const prodValue = document.getElementById('productivityValue');
 const endDisplay = document.getElementById('endTimeDisplay');
 const progressRing = document.getElementById('progressRing');
+const ringCircle = progressRing.querySelector('.ring');
+const percentDisplay = document.getElementById('percentDisplay');
 const darkToggle = document.getElementById('darkModeToggle');
 
 const timeInfo = document.getElementById('timeInfo');
 let timerInterval;
 let endTimestamp;
+const RADIUS = 90;
+const CIRC = 2 * Math.PI * RADIUS;
+ringCircle.style.strokeDasharray = CIRC;
+
+const colorThemes = {
+  blue: {light: '#2563EB', dark: '#60A5FA'},
+  pink: {light: '#EC4899', dark: '#F9A8D4'},
+  green: {light: '#10B981', dark: '#6EE7B7'},
+  purple: {light: '#8B5CF6', dark: '#C4B5FD'}
+};
+
+function setTheme(name) {
+  const t = colorThemes[name];
+  if (!t) return;
+  document.documentElement.style.setProperty('--ring-color', t.light);
+  document.documentElement.style.setProperty('--ring-color-dark', t.dark);
+  localStorage.setItem('theme', name);
+}
+
+function setProgress(p) {
+  const offset = CIRC * (1 - p / 100);
+  ringCircle.style.strokeDashoffset = offset;
+  percentDisplay.textContent = Math.floor(p) + '%';
+}
 
 function setStartDefault() {
   startTime.value = '07:00';
@@ -41,8 +67,7 @@ function calcEndTime() {
   endDisplay.textContent = 'Ends \u00b7 ' + formatAMPM(end);
   endTimestamp = new Date();
   endTimestamp.setHours(end.getHours(), end.getMinutes(), 0, 0);
-    progressRing.style.setProperty('--value', 0);
-    progressRing.dataset.label = '';
+  setProgress(0);
   localStorage.setItem('prodFactor', slider.value);
 }
 
@@ -71,7 +96,7 @@ function updateTimer() {
   let perc = (elapsed / totalMs) * 100;
   perc = Math.min(100, Math.max(0, perc));
 
-  progressRing.style.setProperty('--value', perc);
+  setProgress(perc);
 
   let remainingMs = endTimestamp - now;
   if (remainingMs < 0) remainingMs = 0;
@@ -84,8 +109,7 @@ function updateTimer() {
 
   timeInfo.textContent =
     doneHrs + 'h ' + doneMins + 'm done · ' +
-    hrs + 'h ' + mins + 'm left · ' +
-    Math.floor(perc) + '% done';
+    hrs + 'h ' + mins + 'm left';
 }
 
 slider.addEventListener('input', updateSliderVal);
@@ -107,6 +131,10 @@ document.querySelectorAll('.adjust-time').forEach(btn => {
   btn.addEventListener('click', () => modifyDuration(Number(btn.dataset.minutes)));
 });
 
+document.querySelectorAll('#colorOptions .color-btn').forEach(btn => {
+  btn.addEventListener('click', () => setTheme(btn.dataset.color));
+});
+
 if (darkToggle) {
   const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
   const saved = localStorage.getItem('darkMode');
@@ -123,6 +151,12 @@ const savedProd = localStorage.getItem('prodFactor');
 if (savedProd) {
   slider.value = savedProd;
   prodValue.textContent = savedProd + '%';
+}
+const savedTheme = localStorage.getItem('theme');
+if (savedTheme && colorThemes[savedTheme]) {
+  setTheme(savedTheme);
+} else {
+  setTheme('blue');
 }
 setStartDefault();
 calcEndTime();
