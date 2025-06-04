@@ -25,6 +25,8 @@ let endTimestamp;
 
 function setStartDefault() {
   startTime.value = '07:00';
+  hoursInput.value = 7;
+  minutesInput.value = 0;
 }
 
 function calcEndTime() {

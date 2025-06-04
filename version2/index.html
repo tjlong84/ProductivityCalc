@@ -28,24 +28,23 @@
       font-weight: bold;
     }
     .radial-progress {
-      --size: 180px;
-      --thickness: 12px;
+      --size: 200vmax;
       --value: 0;
+      position: fixed;
+      top: 50%;
+      left: 50%;
       width: var(--size);
       height: var(--size);
+      transform: translate(-50%, -50%);
       border-radius: 50%;
-      position: relative;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: conic-gradient(var(--ring-color) calc(var(--value) * 1%), #e5e7eb 0);
+      background: conic-gradient(var(--ring-color) calc(var(--value) * 1%), var(--bg-light) 0);
+      z-index: -1;
     }
     .radial-progress::after {
-      content: attr(data-label);
-      font-size: 1.25rem;
+      content: '';
     }
     body.dark-mode .radial-progress {
-      background: conic-gradient(var(--ring-color-dark) calc(var(--value) * 1%), #444 0);
+      background: conic-gradient(var(--ring-color-dark) calc(var(--value) * 1%), var(--bg-dark) 0);
     }
     .secondary-links {
       position: absolute;
@@ -67,12 +66,10 @@
     <button id="historyBtn" class="btn btn-link p-0" aria-label="History"><i class="fas fa-clock"></i></button>
     <button id="settingsBtn" class="btn btn-link p-0" aria-label="Settings" data-toggle="modal" data-target="#settingsModal"><i class="fas fa-cog"></i></button>
   </div>
+  <div id="progressRing" class="radial-progress" aria-hidden="true"></div>
   <div class="container text-center pt-5" id="homeScreen">
     <h1 id="endTimeDisplay">Ends · --:--</h1>
     <div id="timeInfo" class="text-muted mb-3"></div>
-      <div class="my-3 d-flex justify-content-center">
-        <div id="progressRing" class="radial-progress"></div>
-      </div>
     <div class="card input-card text-left mx-auto" style="max-width: 350px;">
       <div class="card-body">
         <div class="form-group">
@@ -82,7 +79,7 @@
         <div class="form-row">
           <div class="col">
             <label for="durationHours">Hours</label>
-            <input id="durationHours" type="number" min="0" max="23" value="0" class="form-control">
+            <input id="durationHours" type="number" min="0" max="23" value="7" class="form-control">
           </div>
           <div class="col">
             <label for="durationMinutes">Minutes</label>
