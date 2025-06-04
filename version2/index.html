@@ -4,45 +4,62 @@
 <head>
   <meta charset="UTF-8">
   <title>Productivity Calculator v2</title>
-  <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css'><link rel="stylesheet" href="./style.css">
-
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css">
+  <style>
+    body.dark-mode {
+      background-color: #343a40;
+      color: #f8f9fa;
+    }
+  </style>
 </head>
 <body>
-<!-- partial:index.partial.html -->
-<div class="container">
-  <div class="text-center my-3">
-    <a href="../index.html">Back to original version</a>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="#">ProductivityCalc</a>
+  <div class="collapse navbar-collapse">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item">
+        <a class="nav-link" href="../index.html">Original Version</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="../README.md">Help</a>
+      </li>
+    </ul>
+    <div class="form-inline">
+      <div class="custom-control custom-switch">
+        <input type="checkbox" class="custom-control-input" id="darkModeToggle">
+        <label class="custom-control-label" for="darkModeToggle">Dark mode</label>
+      </div>
+    </div>
   </div>
-  <div class="col-sm">
-    <table class="table">
-      <tr>
-        <td>Start Time </td>
-        <td><input type="time" id="startTime" value='07:00'></td>
-      </tr>
-      <tr>
-        <td>Scheduled Therapy Time Hours </td>
-        <td><input id="productiveHours" type="number" min="0" step="1" value="7"></td>
+</nav>
+<div class="container mt-4">
+  <div class="card mb-3">
+    <div class="card-header">Work Day Setup</div>
+    <div class="card-body">
+      <div class="form-group">
+        <label for="startTime">Start Time</label>
+        <input type="time" class="form-control form-control-lg" id="startTime" value="07:00" placeholder="When does your day start?">
+      </div>
+      <div class="form-group">
+        <label for="productiveHours">Scheduled Therapy Time Hours</label>
+        <input id="productiveHours" class="form-control form-control-lg" type="number" min="0" step="1" value="7" placeholder="Hours of therapy">
+      </div>
+      <div class="form-group">
+        <label for="productiveMinutes">Scheduled Therapy Time Minutes</label>
+        <input id="productiveMinutes" class="form-control form-control-lg" type="number" min="0" step="1" value="30" placeholder="Minutes of therapy">
+      </div>
+      <div class="form-group">
+        <label for="productivity">Productivity</label>
+        <input type="number" class="form-control form-control-lg" value="85" min="0" max="100" step="1" id="productivity" placeholder="Target %">%
+      </div>
+    </div>
+  </div>
 
-      </tr>
-      <tr>
-        <td>Scheduled Therapy Time Minutes </td>
-        <td><input id="productiveMinutes" type="number" min="0" step="1" value="30"></td>
-      </tr>
-      <tr>
-        <td>
-          Productivity </td>
-        <td><input type="number" value="85" min="0" max="100" step="1" id=productivity>%</td>
-      </tr>
-    </table>
-  </div>
-   
-  <div class="col-sm">
-    <table class="table">
-      <tr>
-        <td><h2>
-          Perfect end time is <span id="outputTime"></span></h2></td>
-      </tr>
-    </table>
+  <div class="card text-white bg-info mb-3">
+    <div class="card-header">Your End Time</div>
+    <div class="card-body text-center">
+      <h2 class="card-title" id="outputTime"></h2>
+    </div>
   </div>
 </div>
 <!-- partial -->

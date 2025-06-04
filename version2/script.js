@@ -27,13 +27,20 @@ function formatAMPM(date) {
   return strTime;
 }
 
-document.getElementById("startTime").addEventListener("change", calcEndTime);
+document.getElementById("startTime").addEventListener("input", calcEndTime);
 document
   .getElementById("productiveHours")
-  .addEventListener("change", calcEndTime);
+  .addEventListener("input", calcEndTime);
 document
   .getElementById("productiveMinutes")
-  .addEventListener("change", calcEndTime);
-document.getElementById("productivity").addEventListener("change", calcEndTime);
+  .addEventListener("input", calcEndTime);
+document.getElementById("productivity").addEventListener("input", calcEndTime);
+
+var darkToggle = document.getElementById("darkModeToggle");
+if (darkToggle) {
+  darkToggle.addEventListener("change", function () {
+    document.body.classList.toggle("dark-mode", this.checked);
+  });
+}
 
 calcEndTime();
