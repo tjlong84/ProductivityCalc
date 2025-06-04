@@ -49,10 +49,13 @@ function setProgress(p) {
   percentDisplay.textContent = Math.floor(p) + '%';
 }
 
-function setStartDefault() {
-  startTime.value = '07:00';
-  hoursInput.value = 7;
-  minutesInput.value = 0;
+function loadSavedInputs() {
+  const savedStart = localStorage.getItem('startTime');
+  const savedHours = localStorage.getItem('durationHours');
+  const savedMinutes = localStorage.getItem('durationMinutes');
+  startTime.value = savedStart ? savedStart : '07:00';
+  hoursInput.value = savedHours ? savedHours : 7;
+  minutesInput.value = savedMinutes ? savedMinutes : 0;
 }
 
 function calcEndTime() {
@@ -83,6 +86,8 @@ function modifyDuration(mins) {
   total = Math.max(0, Math.min(max, total));
   hoursInput.value = Math.floor(total / 60);
   minutesInput.value = total % 60;
+  localStorage.setItem('durationHours', hoursInput.value);
+  localStorage.setItem('durationMinutes', minutesInput.value);
   calcEndTime();
 }
 
@@ -122,9 +127,18 @@ prodPlus.addEventListener('click', () => {
   slider.dispatchEvent(new Event('input'));
 });
 
-startTime.addEventListener('input', calcEndTime);
-hoursInput.addEventListener('input', calcEndTime);
-minutesInput.addEventListener('input', calcEndTime);
+startTime.addEventListener('input', () => {
+  localStorage.setItem('startTime', startTime.value);
+  calcEndTime();
+});
+hoursInput.addEventListener('input', () => {
+  localStorage.setItem('durationHours', hoursInput.value);
+  calcEndTime();
+});
+minutesInput.addEventListener('input', () => {
+  localStorage.setItem('durationMinutes', minutesInput.value);
+  calcEndTime();
+});
 
 
 document.querySelectorAll('.adjust-time').forEach(btn => {
@@ -158,7 +172,7 @@ if (savedTheme && colorThemes[savedTheme]) {
 } else {
   setTheme('blue');
 }
-setStartDefault();
+loadSavedInputs();
 calcEndTime();
 updateTimer();
 timerInterval = setInterval(updateTimer, 1000);
