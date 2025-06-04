@@ -46,7 +46,8 @@ The `version2/` directory contains an experimental redesign. Major differences f
 - **Modernized UI** using Bootstrap cards and a cleaner layout.
 - **Range slider** and plus/minus buttons for adjusting productivity goals.
 - **Quick time adjustment buttons** to add or subtract common increments.
-- **Live progress ring** and countdown showing time remaining in the day.
+- **Live progress ring** with countdown and a display of completed versus remaining time.
+- **Color theme options** for the ring, stored in `localStorage`.
 - **Optional dark mode** with the preference stored in `localStorage`.
 
 Version&nbsp;2 is still being iterated on, so behavior or styling may change. The classic version remains in the project root for comparison.
