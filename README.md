@@ -1,6 +1,18 @@
 # ProductivityCalc
 
-ProductivityCalc is a small single-page web application that helps therapists determine when they should finish their work day. By providing a start time, the amount of scheduled therapy time, and a desired productivity percentage, the page displays the time you need to clock out in order to meet that productivity goal.
+This repository now contains **two** versions of the Productivity Calculator. The
+original implementation lives at the root of the project while a reworked
+prototype for **version&nbsp;2** is found in the `version2/` folder. Both are static
+web apps that calculate when a therapist should end their day based on their
+scheduled therapy time and productivity goal.
+
+The purpose of this branch is to prototype and test the version&nbsp;2 interface and
+features while still keeping the original version intact for reference.
+
+ProductivityCalc helps therapists determine when they should finish their work
+day. By providing a start time, the amount of scheduled therapy time, and a
+desired productivity percentage, the page displays the time you need to clock
+out in order to meet that productivity goal.
 
 ## How It Works
 
@@ -26,6 +38,18 @@ No build steps are necessary; the project consists of static HTML and JavaScript
 - `script.js` – calculation logic and event handlers.
 
 Clone or download the repository and open `index.html` to experiment locally. You can modify the styles or JavaScript as needed.
+
+## Version 2 Prototype
+
+The `version2/` directory contains an experimental redesign. Major differences from the original include:
+
+- **Modernized UI** using Bootstrap cards and a cleaner layout.
+- **Range slider** and plus/minus buttons for adjusting productivity goals.
+- **Quick time adjustment buttons** to add or subtract common increments.
+- **Live progress ring** and countdown showing time remaining in the day.
+- **Optional dark mode** with the preference stored in `localStorage`.
+
+Version&nbsp;2 is still being iterated on, so behavior or styling may change. The classic version remains in the project root for comparison.
 
 ## License
 
