@@ -17,10 +17,9 @@ const prodPlus = document.getElementById('prodPlus');
 const prodValue = document.getElementById('productivityValue');
 const endDisplay = document.getElementById('endTimeDisplay');
 const progressRing = document.getElementById('progressRing');
-const startStopBtn = document.getElementById('startStopBtn');
 const darkToggle = document.getElementById('darkModeToggle');
 
-let isRunning = false;
+const timeInfo = document.getElementById('timeInfo');
 let timerInterval;
 let endTimestamp;
 
@@ -51,47 +50,31 @@ function updateSliderVal() {
   calcEndTime();
 }
 
-function applyPreset(mins) {
-  hoursInput.value = Math.floor(mins/60);
-  minutesInput.value = mins % 60;
+
+function modifyDuration(mins) {
+  let total = Number(hoursInput.value) * 60 + Number(minutesInput.value) + mins;
+  const max = 23 * 60 + 55;
+  total = Math.max(0, Math.min(max, total));
+  hoursInput.value = Math.floor(total / 60);
+  minutesInput.value = total % 60;
   calcEndTime();
 }
 
-function startTimer() {
-  if (isRunning) return;
-  isRunning = true;
-  startStopBtn.textContent = 'Stop';
-  startStopBtn.classList.replace('btn-success','btn-danger');
-  timerInterval = setInterval(updateTimer, 1000);
-  updateTimer();
-}
-
-function stopTimer() {
-  isRunning = false;
-  clearInterval(timerInterval);
-  startStopBtn.textContent = 'Start';
-  startStopBtn.classList.replace('btn-danger','btn-success');
-  calcEndTime();
-}
 
 function updateTimer() {
   const now = new Date();
-  const totalMs = (Number(hoursInput.value)*60 + Number(minutesInput.value)) / (Number(slider.value)/100) * 60000;
+  const totalMs = (Number(hoursInput.value) * 60 + Number(minutesInput.value)) / (Number(slider.value) / 100) * 60000;
   const startDate = new Date(now.toDateString() + ' ' + startTime.value);
-  const elapsed = now - startDate;
-  const perc = Math.min(100, elapsed/totalMs*100);
+  let elapsed = now - startDate;
+  let perc = elapsed / totalMs * 100;
+  perc = Math.min(100, Math.max(0, perc));
   progressRing.style.setProperty('--value', perc);
   progressRing.dataset.label = Math.floor(perc) + '%';
-  const remainingMs = endTimestamp - now;
-  if (remainingMs <= 0) {
-    stopTimer();
-    progressRing.style.setProperty('--value', 100);
-    progressRing.dataset.label = '100%';
-  } else {
-    const hrs = Math.floor(remainingMs/3600000);
-    const mins = Math.ceil((remainingMs%3600000)/60000);
-    endDisplay.textContent = 'Time left \u00b7 ' + hrs + 'h ' + mins + 'm';
-  }
+  let remainingMs = endTimestamp - now;
+  if (remainingMs < 0) remainingMs = 0;
+  const hrs = Math.floor(remainingMs / 3600000);
+  const mins = Math.ceil((remainingMs % 3600000) / 60000);
+  timeInfo.textContent = hrs + 'h ' + mins + 'm left · ' + Math.floor(perc) + '%';
 }
 
 slider.addEventListener('input', updateSliderVal);
@@ -100,7 +83,7 @@ prodMinus.addEventListener('click', () => {
   slider.dispatchEvent(new Event('input'));
 });
 prodPlus.addEventListener('click', () => {
-  slider.value = Math.min(150, Number(slider.value) + 5);
+  slider.value = Math.min(100, Number(slider.value) + 5);
   slider.dispatchEvent(new Event('input'));
 });
 
@@ -108,15 +91,9 @@ startTime.addEventListener('input', calcEndTime);
 hoursInput.addEventListener('input', calcEndTime);
 minutesInput.addEventListener('input', calcEndTime);
 
-startStopBtn.addEventListener('click', () => {
-  isRunning ? stopTimer() : startTimer();
-});
-progressRing.addEventListener('click', () => {
-  isRunning ? stopTimer() : startTimer();
-});
 
-document.querySelectorAll('.preset').forEach(btn => {
-  btn.addEventListener('click', () => applyPreset(Number(btn.dataset.minutes)));
+document.querySelectorAll('.adjust-time').forEach(btn => {
+  btn.addEventListener('click', () => modifyDuration(Number(btn.dataset.minutes)));
 });
 
 if (darkToggle) {
@@ -138,3 +115,5 @@ if (savedProd) {
 }
 setStartNow();
 calcEndTime();
+updateTimer();
+timerInterval = setInterval(updateTimer, 1000);
