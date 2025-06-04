@@ -23,9 +23,8 @@ const timeInfo = document.getElementById('timeInfo');
 let timerInterval;
 let endTimestamp;
 
-function setStartNow() {
-  const now = new Date();
-  startTime.value = now.toISOString().slice(11,16);
+function setStartDefault() {
+  startTime.value = '07:00';
 }
 
 function calcEndTime() {
@@ -40,8 +39,8 @@ function calcEndTime() {
   endDisplay.textContent = 'Ends \u00b7 ' + formatAMPM(end);
   endTimestamp = new Date();
   endTimestamp.setHours(end.getHours(), end.getMinutes(), 0, 0);
-  progressRing.style.setProperty('--value', 0);
-  progressRing.dataset.label = '0%';
+    progressRing.style.setProperty('--value', 0);
+    progressRing.dataset.label = '';
   localStorage.setItem('prodFactor', slider.value);
 }
 
@@ -68,13 +67,12 @@ function updateTimer() {
   let elapsed = now - startDate;
   let perc = elapsed / totalMs * 100;
   perc = Math.min(100, Math.max(0, perc));
-  progressRing.style.setProperty('--value', perc);
-  progressRing.dataset.label = Math.floor(perc) + '%';
-  let remainingMs = endTimestamp - now;
-  if (remainingMs < 0) remainingMs = 0;
-  const hrs = Math.floor(remainingMs / 3600000);
-  const mins = Math.ceil((remainingMs % 3600000) / 60000);
-  timeInfo.textContent = hrs + 'h ' + mins + 'm left · ' + Math.floor(perc) + '%';
+    progressRing.style.setProperty('--value', perc);
+    let remainingMs = endTimestamp - now;
+    if (remainingMs < 0) remainingMs = 0;
+    const hrs = Math.floor(remainingMs / 3600000);
+    const mins = Math.ceil((remainingMs % 3600000) / 60000);
+    timeInfo.textContent = hrs + 'h ' + mins + 'm left · ' + Math.floor(perc) + '% done';
 }
 
 slider.addEventListener('input', updateSliderVal);
@@ -113,7 +111,7 @@ if (savedProd) {
   slider.value = savedProd;
   prodValue.textContent = savedProd + '%';
 }
-setStartNow();
+setStartDefault();
 calcEndTime();
 updateTimer();
 timerInterval = setInterval(updateTimer, 1000);
