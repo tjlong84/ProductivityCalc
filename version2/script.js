@@ -64,17 +64,28 @@ function modifyDuration(mins) {
 
 function updateTimer() {
   const now = new Date();
-  const totalMs = (Number(hoursInput.value) * 60 + Number(minutesInput.value)) / (Number(slider.value) / 100) * 60000;
+  const totalMs = (Number(hoursInput.value) * 60 + Number(minutesInput.value)) /
+    (Number(slider.value) / 100) * 60000;
   const startDate = new Date(now.toDateString() + ' ' + startTime.value);
   let elapsed = now - startDate;
-  let perc = elapsed / totalMs * 100;
+  let perc = (elapsed / totalMs) * 100;
   perc = Math.min(100, Math.max(0, perc));
-    progressRing.style.setProperty('--value', perc);
-    let remainingMs = endTimestamp - now;
-    if (remainingMs < 0) remainingMs = 0;
-    const hrs = Math.floor(remainingMs / 3600000);
-    const mins = Math.ceil((remainingMs % 3600000) / 60000);
-    timeInfo.textContent = hrs + 'h ' + mins + 'm left · ' + Math.floor(perc) + '% done';
+
+  progressRing.style.setProperty('--value', perc);
+
+  let remainingMs = endTimestamp - now;
+  if (remainingMs < 0) remainingMs = 0;
+  const hrs = Math.floor(remainingMs / 3600000);
+  const mins = Math.ceil((remainingMs % 3600000) / 60000);
+
+  const completedMs = Math.min(totalMs, Math.max(0, elapsed));
+  const doneHrs = Math.floor(completedMs / 3600000);
+  const doneMins = Math.floor((completedMs % 3600000) / 60000);
+
+  timeInfo.textContent =
+    doneHrs + 'h ' + doneMins + 'm done · ' +
+    hrs + 'h ' + mins + 'm left · ' +
+    Math.floor(perc) + '% done';
 }
 
 slider.addEventListener('input', updateSliderVal);
