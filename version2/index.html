@@ -1,93 +1,145 @@
-
 <!DOCTYPE html>
-<html lang="en" >
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <title>Productivity Calculator v2</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
   <style>
+    :root {
+      --primary-light: #2563EB;
+      --primary-dark: #60A5FA;
+      --bg-light: #FAFAFA;
+      --bg-dark: #121212;
+    }
+    body {
+      background-color: var(--bg-light);
+      transition: background-color .3s ease;
+    }
     body.dark-mode {
-      background-color: #343a40;
+      background-color: var(--bg-dark);
       color: #f8f9fa;
+    }
+    #endTimeDisplay {
+      font-size: 3rem;
+      font-weight: bold;
+    }
+    .radial-progress {
+      --size: 180px;
+      --thickness: 12px;
+      --value: 0;
+      width: var(--size);
+      height: var(--size);
+      border-radius: 50%;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: conic-gradient(var(--ring-color) calc(var(--value) * 1%), #e5e7eb 0);
+    }
+    .radial-progress::after {
+      content: attr(data-label);
+      font-size: 1.25rem;
+    }
+    body.dark-mode .radial-progress {
+      background: conic-gradient(var(--ring-color-dark) calc(var(--value) * 1%), #444 0);
+    }
+    .action-bar {
+      position: fixed;
+      bottom: 1rem;
+      left: 0;
+      right: 0;
+      padding: 0 1rem;
+    }
+    .secondary-links {
+      position: absolute;
+      top: 0;
+      right: 0;
+      left: 0;
+      padding: .5rem 1rem;
+      display: flex;
+      justify-content: space-between;
+    }
+    .preset {
+      margin-right: .25rem;
+      margin-bottom: .25rem;
     }
   </style>
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <a class="navbar-brand" href="#">ProductivityCalc</a>
-  <div class="collapse navbar-collapse">
-    <ul class="navbar-nav mr-auto">
-      <li class="nav-item">
-        <a class="nav-link" href="../index.html">Original Version</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="../README.md">Help</a>
-      </li>
-    </ul>
-    <div class="form-inline">
-      <div class="custom-control custom-switch">
-        <input type="checkbox" class="custom-control-input" id="darkModeToggle">
-        <label class="custom-control-label" for="darkModeToggle">Dark mode</label>
+  <div class="secondary-links">
+    <button id="historyBtn" class="btn btn-link p-0" aria-label="History"><i class="fas fa-clock"></i></button>
+    <button id="settingsBtn" class="btn btn-link p-0" aria-label="Settings" data-toggle="modal" data-target="#settingsModal"><i class="fas fa-cog"></i></button>
+  </div>
+  <div class="container text-center pt-5" id="homeScreen">
+    <h1 id="endTimeDisplay">Ends · --:--</h1>
+    <div class="my-3 d-flex justify-content-center">
+      <div id="progressRing" class="radial-progress" data-label="0%"></div>
+    </div>
+    <div class="card input-card text-left mx-auto" style="max-width: 350px;">
+      <div class="card-body">
+        <div class="form-group">
+          <label for="startTime">Start Time</label>
+          <input type="time" class="form-control" id="startTime">
+        </div>
+        <div class="form-row">
+          <div class="col">
+            <label for="durationHours">Hours</label>
+            <input id="durationHours" type="number" min="0" max="23" value="0" class="form-control">
+          </div>
+          <div class="col">
+            <label for="durationMinutes">Minutes</label>
+            <input id="durationMinutes" type="number" min="0" max="55" step="5" value="0" class="form-control">
+          </div>
+        </div>
+        <div class="form-group mt-3">
+          <label for="productivitySlider">Productivity <span id="productivityValue">100%</span></label>
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <button type="button" id="prodMinus" class="btn btn-outline-secondary">-</button>
+            </div>
+            <input type="range" id="productivitySlider" class="form-control" min="50" max="150" step="5" value="100">
+            <div class="input-group-append">
+              <button type="button" id="prodPlus" class="btn btn-outline-secondary">+</button>
+            </div>
+          </div>
+        </div>
+        <div class="mb-2">
+          <button type="button" class="btn btn-sm btn-outline-primary preset" data-minutes="25">25 min</button>
+          <button type="button" class="btn btn-sm btn-outline-primary preset" data-minutes="45">45 min</button>
+          <button type="button" class="btn btn-sm btn-outline-primary preset" data-minutes="60">1 h</button>
+          <button type="button" class="btn btn-sm btn-outline-primary preset" data-minutes="120">2 h</button>
+        </div>
       </div>
     </div>
   </div>
-</nav>
-<div class="container mt-4">
-  <div class="card mb-3">
-    <div class="card-header">Work Day Setup</div>
-    <div class="card-body">
-      <div class="form-group">
-        <label for="startTime">Start Time</label>
-        <input type="time" class="form-control form-control-lg" id="startTime" value="07:00" placeholder="When does your day start?">
-      </div>
-      <div class="form-group">
-        <label for="productiveHours">Scheduled Therapy Time Hours</label>
-        <input id="productiveHours" class="form-control form-control-lg" type="number" min="0" step="1" value="7" placeholder="Hours of therapy">
-      </div>
-      <div class="form-group">
-        <label for="productiveMinutes">Scheduled Therapy Time Minutes</label>
-        <input id="productiveMinutes" class="form-control form-control-lg" type="number" min="0" step="1" value="30" placeholder="Minutes of therapy">
-      </div>
-      <div class="form-group">
-        <label for="productivity">Productivity</label>
-        <input type="number" class="form-control form-control-lg" value="85" min="0" max="100" step="1" id="productivity" placeholder="Target %">%
+  <div class="action-bar">
+    <button id="startStopBtn" class="btn btn-success btn-block">Start</button>
+  </div>
+
+  <!-- Settings Modal -->
+  <div class="modal fade" id="settingsModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Settings</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="custom-control custom-switch">
+            <input type="checkbox" class="custom-control-input" id="darkModeToggle">
+            <label class="custom-control-label" for="darkModeToggle">Dark mode</label>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 
-  <div class="card text-white bg-info mb-3">
-    <div class="card-header">Your End Time</div>
-    <div class="card-body text-center">
-      <h2 class="card-title" id="outputTime"></h2>
-    </div>
-  </div>
-</div>
-<!-- partial -->
-<!-- The core Firebase JS SDK is always required and must be listed first -->
-<script src="https://www.gstatic.com/firebasejs/8.2.0/firebase-app.js"></script>
-
-<!-- TODO: Add SDKs for Firebase products that you want to use
-     https://firebase.google.com/docs/web/setup#available-libraries -->
-<script src="https://www.gstatic.com/firebasejs/8.2.0/firebase-analytics.js"></script>
-
-<script>
-  // Your web app's Firebase configuration
-  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-  var firebaseConfig = {
-    apiKey: "AIzaSyDV1BdYShPmhZpnStqgWUyEmWdrSSrF7m8",
-    authDomain: "productivity-calc.firebaseapp.com",
-    projectId: "productivity-calc",
-    storageBucket: "productivity-calc.appspot.com",
-    messagingSenderId: "69197155310",
-    appId: "1:69197155310:web:9f2e1bae8064a42bf11cff",
-    measurementId: "G-2WQWHT5TWQ"
-  };
-  // Initialize Firebase
-  firebase.initializeApp(firebaseConfig);
-  firebase.analytics();
-</script>
-
-  <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js'></script><script  src="./script.js"></script>
-
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/js/bootstrap.bundle.min.js"></script>
+  <script src="./script.js"></script>
 </body>
 </html>
