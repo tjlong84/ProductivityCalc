@@ -27,24 +27,72 @@
       font-size: 3rem;
       font-weight: bold;
     }
-    .radial-progress {
-      --size: 200vmax;
-      --value: 0;
-      position: fixed;
+    .progress-container {
+      position: relative;
+      width: 200px;
+      height: 200px;
+      margin: 1rem auto;
+    }
+    .progress-ring {
+      transform: rotate(-90deg);
+    }
+    .progress-ring circle {
+      fill: transparent;
+      stroke-width: 12;
+    }
+    .progress-ring .ring-bg {
+      stroke: #e6e6e6;
+    }
+    .progress-ring .ring {
+      stroke: var(--ring-color);
+      stroke-linecap: round;
+      stroke-dasharray: 0 1000;
+      transition: stroke-dashoffset .3s ease;
+    }
+    body.dark-mode .progress-ring .ring {
+      stroke: var(--ring-color-dark);
+    }
+    .progress-text {
+      position: absolute;
       top: 50%;
       left: 50%;
-      width: var(--size);
-      height: var(--size);
       transform: translate(-50%, -50%);
+      text-align: center;
+    }
+    .progress-text .percent {
+      font-size: 2.5rem;
+      font-weight: bold;
+      color: var(--ring-color);
+    }
+    body.dark-mode .progress-text .percent {
+      color: var(--ring-color-dark);
+    }
+    .progress-text span {
+      display: block;
+    }
+    .btn-outline-primary,
+    .btn-link {
+      color: var(--ring-color) !important;
+      border-color: var(--ring-color) !important;
+    }
+    .btn-outline-primary:hover {
+      background-color: var(--ring-color) !important;
+      color: #fff !important;
+    }
+    body.dark-mode .btn-outline-primary,
+    body.dark-mode .btn-link {
+      color: var(--ring-color-dark) !important;
+      border-color: var(--ring-color-dark) !important;
+    }
+    body.dark-mode .btn-outline-primary:hover {
+      background-color: var(--ring-color-dark) !important;
+    }
+    #colorOptions .color-btn {
+      width: 30px;
+      height: 30px;
       border-radius: 50%;
-      background: conic-gradient(var(--ring-color) calc(var(--value) * 1%), var(--bg-light) 0);
-      z-index: -1;
-    }
-    .radial-progress::after {
-      content: '';
-    }
-    body.dark-mode .radial-progress {
-      background: conic-gradient(var(--ring-color-dark) calc(var(--value) * 1%), var(--bg-dark) 0);
+      border: none;
+      margin: 0 .25rem;
     }
     .secondary-links {
       position: absolute;
@@ -66,8 +114,18 @@
     <button id="historyBtn" class="btn btn-link p-0" aria-label="History"><i class="fas fa-clock"></i></button>
     <button id="settingsBtn" class="btn btn-link p-0" aria-label="Settings" data-toggle="modal" data-target="#settingsModal"><i class="fas fa-cog"></i></button>
   </div>
-  <div id="progressRing" class="radial-progress" aria-hidden="true"></div>
   <div class="container text-center pt-5" id="homeScreen">
+    <div class="progress-container">
+      <svg id="progressRing" class="progress-ring" width="200" height="200">
+        <circle class="ring-bg" cx="100" cy="100" r="90" />
+        <circle class="ring" cx="100" cy="100" r="90" />
+      </svg>
+      <div id="progressText" class="progress-text">
+        <span>Workday is</span>
+        <span id="percentDisplay" class="percent">0%</span>
+        <span>completed</span>
+      </div>
+    </div>
     <h1 id="endTimeDisplay">Ends · --:--</h1>
     <div id="timeInfo" class="text-muted mb-3"></div>
     <div class="card input-card text-left mx-auto" style="max-width: 350px;">
@@ -117,6 +175,12 @@
           </div>
         </div>
       </div>
+    </div>
+    <div id="colorOptions" class="my-3">
+      <button class="color-btn" data-color="blue" style="background-color:#2563EB"></button>
+      <button class="color-btn" data-color="pink" style="background-color:#EC4899"></button>
+      <button class="color-btn" data-color="green" style="background-color:#10B981"></button>
+      <button class="color-btn" data-color="purple" style="background-color:#8B5CF6"></button>
     </div>
   </div>
 
