@@ -20,6 +20,8 @@ const progressRing = document.getElementById('progressRing');
 const ringCircle = progressRing.querySelector('.ring');
 const percentDisplay = document.getElementById('percentDisplay');
 const darkToggle = document.getElementById('darkModeToggle');
+const extraToggle = document.getElementById('extraInfoToggle');
+const progressContainer = document.getElementById('progressContainer');
 
 const timeInfo = document.getElementById('timeInfo');
 let timerInterval;
@@ -47,6 +49,11 @@ function setProgress(p) {
   const offset = CIRC * (1 - p / 100);
   ringCircle.style.strokeDashoffset = offset;
   percentDisplay.textContent = Math.floor(p) + '%';
+}
+
+function setExtraInfoVisible(show) {
+  if (progressContainer) progressContainer.style.display = show ? '' : 'none';
+  if (timeInfo) timeInfo.style.display = show ? '' : 'none';
 }
 
 function setStartDefault() {
@@ -145,6 +152,19 @@ if (darkToggle) {
     document.body.classList.toggle('dark-mode', darkToggle.checked);
     localStorage.setItem('darkMode', darkToggle.checked);
   });
+}
+
+if (extraToggle) {
+  const saved = localStorage.getItem('showExtra');
+  const show = saved === 'true';
+  setExtraInfoVisible(show);
+  extraToggle.checked = show;
+  extraToggle.addEventListener('change', () => {
+    setExtraInfoVisible(extraToggle.checked);
+    localStorage.setItem('showExtra', extraToggle.checked);
+  });
+} else {
+  setExtraInfoVisible(false);
 }
 
 const savedProd = localStorage.getItem('prodFactor');

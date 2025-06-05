@@ -115,7 +115,7 @@
     <button id="settingsBtn" class="btn btn-link p-0" aria-label="Settings" data-toggle="modal" data-target="#settingsModal"><i class="fas fa-cog"></i></button>
   </div>
   <div class="container text-center pt-5" id="homeScreen">
-    <div class="progress-container">
+    <div class="progress-container" id="progressContainer" style="display:none;">
       <svg id="progressRing" class="progress-ring" width="200" height="200">
         <circle class="ring-bg" cx="100" cy="100" r="90" />
         <circle class="ring" cx="100" cy="100" r="90" />
@@ -127,7 +127,7 @@
       </div>
     </div>
     <h1 id="endTimeDisplay">Ends · --:--</h1>
-    <div id="timeInfo" class="text-muted mb-3"></div>
+    <div id="timeInfo" class="text-muted mb-3" style="display:none;"></div>
     <div class="card input-card text-left mx-auto" style="max-width: 350px;">
       <div class="card-body">
         <div class="form-group">
@@ -198,6 +198,10 @@
           <div class="custom-control custom-switch">
             <input type="checkbox" class="custom-control-input" id="darkModeToggle">
             <label class="custom-control-label" for="darkModeToggle">Dark mode</label>
+          </div>
+          <div class="custom-control custom-switch mt-2">
+            <input type="checkbox" class="custom-control-input" id="extraInfoToggle">
+            <label class="custom-control-label" for="extraInfoToggle">Show progress info</label>
           </div>
         </div>
       </div>
